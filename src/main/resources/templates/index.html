@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <style>
+        td {
+          text-align: center; 
+          vertical-align: middle; 
+        }
+      </style>
+
+    <style>
+        th,
+        td {
+            border: 1px solid black;
+            border-radius: 10px;
+        }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <title>Expense Reporter</title>
+</head>
+
+<body style="background-color:rgb(240, 240, 240)">
+    <h1 style="text-align:center; font-family:arial;">Your Expense Report</h1>
+    <p style="text-align:center; font-family:arial;">Created By Andrew Hsiao</p>
+    <hr>
+
+    <!-- <button style="align-items: center;" type="button" onclick="window.location.reload();">Refresh Data</button> -->
+    <h2 style="font-family:arial;">Your Balance: [[${balance}]]</h2>
+
+    <table style="width: 100%;" id="table">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Spending on this Category</th>
+                <th>Percentage of Balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Table body rows will be added dynamically -->
+        </tbody>
+    </table>
+
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+
+    <script>
+
+        var url = "http://localhost:8080/getCategories";
+        fetch(url)
+            .then(function (response) {
+                if (!response.ok) {
+                    throw new Error("Unable to retrieve valid response");
+                }
+                return response.json();
+            })
+            .then(function (responseData) {
+                const table = document.getElementById("table");
+                const tbody = table.getElementsByTagName("tbody")[0];
+                const totalBalance = responseData[0].amount;
+                let index = 0;
+
+                responseData.forEach(item => {
+                    if (index > 0) {
+                        const row = tbody.insertRow();
+
+                        // Create cells and add data to them
+                        const categoryCell = row.insertCell();
+                        categoryCell.textContent = item.category;
+
+                        const amountCell = row.insertCell();
+                        amountCell.textContent = "$" + item.amount;
+
+                        const percentCell = row.insertCell();
+                        var number = item.amount / totalBalance * 100.00;
+                        percentCell.textContent = number.toFixed(2) + "%";
+                    }
+                    index = index + 1;
+                });
+            })
+            .catch(function (error) {
+                console.error("Error: ", error);
+            });
+    </script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var options = {
+                title: 'Categorical Spending Distribution',
+                backgroundColor: 'transparent',
+                is3D: true
+            };
+            var url = "http://localhost:8080/getPieChartData";
+            fetch(url)
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("Unable to retrieve valid response");
+                    }
+                    return response.json();
+                })
+                .then(function (responseData) {
+                    var header = ["Category", "Balance"];
+                    for (var i = 0; i < responseData.length; i++) {
+                        responseData[i][1] = parseFloat(responseData[i][1]);
+                    }
+                    responseData.splice(0,0,header);
+                    console.log(responseData);
+                    var data = google.visualization.arrayToDataTable(responseData);
+                    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                    chart.draw(data, options);
+                })
+                .catch(function (error) {
+                    console.error("Error: ", error);
+                });
+
+        }
+
+
+    </script>
+
+
+</body>
+
+</html>
