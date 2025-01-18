@@ -13,6 +13,10 @@ public class ExpenseDatabaseService {
 
     public ExpenseDatabaseService() {}
 
+    /**
+     * Uses jdbc to connect to the local MySQL database and add expense data to the database
+     * @param values
+     */
     public void addToDB(List<List<Object>> values) {
         Statement statement = null;
         ResultSet resultSet = null; 
@@ -59,6 +63,10 @@ public class ExpenseDatabaseService {
         }
     }
 
+    /**
+     * Uses jdbc to connect to the local MySQL database and query the number of expenses from the database
+     * @return number of expenses
+     */
     public int getNumExpenses() {
         if (numExpenses != -1) {
             return numExpenses;
@@ -104,6 +112,10 @@ public class ExpenseDatabaseService {
         return numExpenses;
     }
 
+    /**
+     * Uses jdbc to connect to the local MySQL database and query the total balance from the database
+     * @return total balance
+     */
     public double getBalance() {
         Statement statement = null;
         ResultSet resultSet = null; 
@@ -146,6 +158,10 @@ public class ExpenseDatabaseService {
         return -1;
     }
 
+    /**
+     * uses jdbc to connect to the local MySQL database and query the categorical spending from the database
+     * @return categorical spending data
+     */
     public List<Expense> categoriesSorted() {
         List<Expense> categories = new ArrayList<>();
         Statement statement = null;
