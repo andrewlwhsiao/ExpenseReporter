@@ -21,7 +21,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
         function clearDatabase() {
-            var url = "http://localhost:8080/clearDatabase";
+            var url = "http://54.241.95.34:8080/clearDatabase";
             fetch(url)
                 .then(function (response) {
                     if (!response.ok) {
@@ -72,7 +72,7 @@
 
     <script>
 
-        var url = "http://localhost:8080/getCategories";
+        var url = "http://54.241.95.34:8080/getCategories";
         fetch(url)
             .then(function (response) {
                 if (!response.ok) {
@@ -119,7 +119,7 @@
                 backgroundColor: 'transparent',
                 is3D: true
             };
-            var url = "http://localhost:8080/getPieChartData";
+            var url = "http://54.241.95.34:8080/getPieChartData";
             fetch(url)
                 .then(function (response) {
                     if (!response.ok) {
