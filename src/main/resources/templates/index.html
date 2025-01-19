@@ -19,6 +19,26 @@
         }
     </style>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        function clearDatabase() {
+            var url = "http://localhost:8080/clearDatabase";
+            fetch(url)
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw new Error("Unable to clear database");
+                    }
+                })
+                .catch(function (error) {
+                    console.error("Error: ", error);
+                });
+        }
+    </script>
+
+    <script>
+        function refreshPage() {
+            location.reload();
+        }
+    </script>
 
     <title>Expense Reporter</title>
 </head>
@@ -45,6 +65,10 @@
     </table>
 
     <div id="chart_div" style="width: 900px; height: 500px;"></div>
+    <h4 style="font-family:arial;">Enter Your Expenses Here: </h4>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdnWM_5sRF2_gaVvAunIEzHb7PykybD2Z5GrJzRns42rvPEOA/viewform" target="_blank">Go to Google Forms</a>
+    <h4 style="font-family:arial;">Reset Data Here: </h4>
+    <button onclick="clearDatabase(); refreshPage(true);">Reset Data</button>
 
     <script>
 
@@ -122,6 +146,7 @@
 
 
     </script>
+
 
 
 </body>

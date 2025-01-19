@@ -53,7 +53,7 @@ public class SheetsDataRetriever {
         if (accessToken.getExpiresInSeconds() <= 60) {
             accessToken.refreshToken();
         }
-        int numOfDataRetrieved = new ExpenseDatabaseService().getNumExpenses();
+        int numOfDataRetrieved = new ExpenseDatabaseService().getnumExpensesRetrieved();
         int nextRow = 2 + numOfDataRetrieved;
         String range = String.format("Form Responses 1!B%s:F", nextRow);
         ValueRange response = service.spreadsheets().values()
