@@ -27,6 +27,13 @@ public class ExpenseReporterService {
     }
 
     /**
+     * Uses the class' databaseService instance to clear the database and reset the expense data
+     */
+    public void clearDatabase() {
+        databaseService.clearDatabase();
+    }
+
+    /**
      * Uses the class' databaseService instance to get the categorical spending data
      * @return list of each category and the amount spent
      */

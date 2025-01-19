@@ -9,7 +9,7 @@ public class ExpenseDatabaseService {
     private final String jdbcURL = "jdbc:mysql://expense.c5s6eymugmjd.us-east-1.rds.amazonaws.com:3306/expenses";
     private final String username = "admin";
     private final String password = "Defi22foss!";
-    private int numExpenses = -1;
+    private int numExpensesRetrieved = -1;
 
     public ExpenseDatabaseService() {}
 
@@ -24,7 +24,7 @@ public class ExpenseDatabaseService {
         try {
             connection = DriverManager.getConnection(jdbcURL, username, password);
             statement = connection.createStatement();
-            numExpenses += values.size();
+            numExpensesRetrieved += values.size();
             
             for (List<Object> value: values) {
                 String name = String.valueOf(value.get(0));
@@ -67,9 +67,9 @@ public class ExpenseDatabaseService {
      * Uses jdbc to connect to the rds MySQL database and query the number of expenses from the database
      * @return number of expenses
      */
-    public int getNumExpenses() {
-        if (numExpenses != -1) {
-            return numExpenses;
+    public int getnumExpensesRetrieved() {
+        if (numExpensesRetrieved != -1) {
+            return numExpensesRetrieved;
         }
         Statement statement = null;
         ResultSet resultSet = null; 
@@ -82,7 +82,7 @@ public class ExpenseDatabaseService {
             resultSet = statement.executeQuery(sqlQuery);
 
             while (resultSet.next()) {
-                numExpenses = resultSet.getInt("COUNT(*)");
+                numExpensesRetrieved = resultSet.getInt("COUNT(*)");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -109,7 +109,7 @@ public class ExpenseDatabaseService {
                 e.printStackTrace();
             }
         }
-        return numExpenses;
+        return numExpensesRetrieved;
     }
 
     /**
@@ -213,7 +213,7 @@ public class ExpenseDatabaseService {
      * uses jdbc to connect to the rds MySQL database and delete all rows from the database
      */
     public void clearDatabase() {
-        if (numExpenses != -1) {
+        if (numExpensesRetrieved != -1) {
             return;
         }
         Statement statement = null;
@@ -224,7 +224,7 @@ public class ExpenseDatabaseService {
             statement = connection.createStatement();
             
             String sqlQuery = "DELETE FROM expenses;";
-            statement.executeQuery(sqlQuery);
+            statement.executeUpdate(sqlQuery);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

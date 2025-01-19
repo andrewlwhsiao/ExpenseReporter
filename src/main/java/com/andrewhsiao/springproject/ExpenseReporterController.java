@@ -15,10 +15,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ExpenseReporterController {
     private ExpenseReporterService reportService;
     
+    @GetMapping("/")
+    public String home() throws IOException, GeneralSecurityException {
+        return "redirect:/report"; 
+    }
+
     @GetMapping("/report")
     public String report(Model model) throws IOException, GeneralSecurityException {
         model.addAttribute("balance", getService().getBalance());
         return "index";
+    }
+
+    @GetMapping("/clearDatabase")
+    public String clearDatabase() throws IOException, GeneralSecurityException {
+        getService().clearDatabase();
+        return "redirect:/report";
     }
 
     @GetMapping("/getCategories")
