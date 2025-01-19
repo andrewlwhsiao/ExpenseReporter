@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExpenseDatabaseService {
-    private final String jdbcURL = "jdbc:mysql://localhost:3306/expenses";
-    private final String username = "root";
+    private final String jdbcURL = "jdbc:mysql://expense.c5s6eymugmjd.us-east-1.rds.amazonaws.com:3306/expenses";
+    private final String username = "admin";
     private final String password = "Defi22foss!";
     private int numExpenses = -1;
 
     public ExpenseDatabaseService() {}
 
     /**
-     * Uses jdbc to connect to the local MySQL database and add expense data to the database
+     * Uses jdbc to connect to the rds MySQL database and add expense data to the database
      * @param values
      */
     public void addToDB(List<List<Object>> values) {
@@ -64,7 +64,7 @@ public class ExpenseDatabaseService {
     }
 
     /**
-     * Uses jdbc to connect to the local MySQL database and query the number of expenses from the database
+     * Uses jdbc to connect to the rds MySQL database and query the number of expenses from the database
      * @return number of expenses
      */
     public int getNumExpenses() {
@@ -113,7 +113,7 @@ public class ExpenseDatabaseService {
     }
 
     /**
-     * Uses jdbc to connect to the local MySQL database and query the total balance from the database
+     * Uses jdbc to connect to the rds MySQL database and query the total balance from the database
      * @return total balance
      */
     public double getBalance() {
@@ -159,7 +159,7 @@ public class ExpenseDatabaseService {
     }
 
     /**
-     * uses jdbc to connect to the local MySQL database and query the categorical spending from the database
+     * uses jdbc to connect to the rds MySQL database and query the categorical spending from the database
      * @return categorical spending data
      */
     public List<Expense> categoriesSorted() {
@@ -209,4 +209,47 @@ public class ExpenseDatabaseService {
         return categories;
     }
 
+    /**
+     * uses jdbc to connect to the rds MySQL database and delete all rows from the database
+     */
+    public void clearDatabase() {
+        if (numExpenses != -1) {
+            return;
+        }
+        Statement statement = null;
+        ResultSet resultSet = null; 
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(jdbcURL, username, password);
+            statement = connection.createStatement();
+            
+            String sqlQuery = "DELETE FROM expenses;";
+            statement.executeQuery(sqlQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (resultSet != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (connection != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return numExpenses;
+    }
 }
