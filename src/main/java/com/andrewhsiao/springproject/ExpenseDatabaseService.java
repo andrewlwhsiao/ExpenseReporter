@@ -225,7 +225,6 @@ public class ExpenseDatabaseService {
             
             String sqlQuery = "DELETE FROM expenses;";
             statement.executeQuery(sqlQuery);
-            numExpenses = -1;
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
